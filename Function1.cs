@@ -34,8 +34,17 @@ namespace MSALSamples
             string clientId = Environment.GetEnvironmentVariable("ClientId");
             string authority = Environment.GetEnvironmentVariable("Authority");
             string apiUrl = Environment.GetEnvironmentVariable("ApiUrl");
-            string graphQueryURI = $"{apiUrl}v1.0/users?$filter=startswith(userPrincipalName%2C+'{email}')";
+            var builder = new UriBuilder($"{apiUrl}v1.0/users");
+            var query = System.Web.HttpUtility.ParseQueryString(string.Empty);
+            query["$select"] = "id";
+            query["$format"] = "json";
+            query["$filter"] = $"startswith(userPrincipalName,'{email}')";
 
+            builder.Query = query.ToString();
+
+            string graphQueryURI = builder.ToString();
+            log.LogInformation($"******QUERY: {graphQueryURI}");
+            
             IConfidentialClientApplication app;
             app = ConfidentialClientApplicationBuilder.Create(clientId)
                     .WithClientSecret(clientSecret)
@@ -63,7 +72,6 @@ namespace MSALSamples
                 {
                     
                     var defaultRequetHeaders = client.DefaultRequestHeaders;
-                    defaultRequetHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     defaultRequetHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.AccessToken);
                     
                     client.BaseAddress = new Uri("https://www.google.com");
