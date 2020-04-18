@@ -1,0 +1,13 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "Authority": "https://login.microsoftonline.com/<TENANTID>",
+    "ApiUrl": "https://graph.microsoft.com/",
+    "ClientId": "<CLIENTID>",
+    "ClientSecret": "<CLIENTSECRET>"
+
+
+  }
+ }
